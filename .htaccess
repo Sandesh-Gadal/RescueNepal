@@ -1,0 +1,83 @@
+Options -Indexes -MultiViews
+DirectoryIndex index.php
+RewriteEngine On
+
+# Production HTTPS. Handles cPanel HTTPS and common reverse proxies.
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !^https$ [NC]
+RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1)(:\d+)?$ [NC]
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L,NE]
+
+# Block diagnostic HTTP methods.
+RewriteCond %{REQUEST_METHOD} ^(?:TRACE|TRACK)$ [NC]
+RewriteRule ^ - [F,L]
+
+# Canonical setup URL (fresh install only; setup.php locks itself after install).
+RewriteCond %{THE_REQUEST} \s/+setup\.php(?:[?\s]) [NC]
+RewriteRule ^setup\.php$ setup [R=301,L,NE]
+RewriteRule ^setup/?$ setup.php [QSA,L]
+
+# Never serve application internals or source/deployment artifacts directly.
+RewriteRule ^(?:includes|storage|docs|deployment)(?:/|$) - [F,L,NC]
+RewriteRule ^(?:config(?:\.example)?\.php|database\.sql|SHA256SUMS\.txt|README[^/]*|SESSION_HOTFIX_README\.txt)$ - [F,L,NC]
+RewriteRule ^samples/(?:test_data\.sql)$ - [F,L,NC]
+
+<FilesMatch "(?i)(^\.|\.(?:bak|backup|old|orig|save|swp|log|ini|env|sql|md)$)">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(self), camera=(self), microphone=()"
+</IfModule>
+
+# ---------------- PUBLIC ROUTES ----------------
+RewriteRule ^$ index.php [L]
+RewriteRule ^missing-person/?$ report.php?type=missing [QSA,L]
+RewriteRule ^rescue-request/?$ report.php?type=rescue [QSA,L]
+RewriteRule ^rescued-person/?$ rescued.php [QSA,L]
+RewriteRule ^submit-rescued/?$ submit_rescued.php [QSA,L]
+RewriteRule ^find/?$ public_search.php [QSA,L]
+RewriteRule ^family-match/?$ family_match.php [QSA,L]
+RewriteRule ^family-match/([0-9]+)/?$ family_match.php?case=$1 [QSA,L]
+RewriteRule ^otp/?$ otp.php [QSA,L]
+RewriteRule ^track/?$ track.php [QSA,L]
+RewriteRule ^track/([A-Za-z0-9-]+)/?$ track.php?code=$1 [QSA,L]
+RewriteRule ^submit/?$ submit.php [QSA,L]
+RewriteRule ^confirmation/([A-Fa-f0-9]+)/?$ success.php?token=$1 [QSA,L]
+RewriteRule ^receipt/([A-Fa-f0-9]+)/?$ receipt.php?token=$1 [QSA,L]
+
+# ---------------- ADMIN / STAFF ROUTES ----------------
+RewriteRule ^admin/?$ admin/login.php [QSA,L]
+RewriteRule ^admin/login/?$ admin/login.php [QSA,L]
+RewriteRule ^admin/logout/?$ admin/logout.php [QSA,L]
+RewriteRule ^admin/cases/?$ admin/dashboard.php [QSA,L]
+RewriteRule ^admin/cases/([0-9]+)/report/?$ admin/report.php?id=$1 [QSA,L]
+RewriteRule ^admin/cases/([0-9]+)/id-card/?$ admin/idcard.php?id=$1 [QSA,L]
+RewriteRule ^admin/cases/([0-9]+)/public-preview/?$ track.php?admin_preview=1&id=$1 [QSA,L]
+RewriteRule ^admin/cases/([0-9]+)/?$ admin/case.php?id=$1 [QSA,L]
+RewriteRule ^admin/new-report/?$ admin/operator_help.php [QSA,L]
+RewriteRule ^admin/new-report/(missing|rescue)/?$ report.php?staff=1&type=$1 [QSA,L]
+RewriteRule ^admin/new-report/rescued/?$ rescued.php?staff=1 [QSA,L]
+RewriteRule ^admin/submit-rescued/?$ submit_rescued.php?staff=1 [QSA,L]
+RewriteRule ^admin/new-report/deceased/?$ admin/deceased.php [QSA,L]
+RewriteRule ^admin/reconciliation/([0-9]+)/?$ admin/reconciliation.php?id=$1 [QSA,L]
+RewriteRule ^admin/family-requests/?$ admin/family_requests.php [QSA,L]
+RewriteRule ^admin/media/(dvi|dvi-photo|family)/([0-9]+)/?$ admin/media.php?kind=$1&id=$2 [QSA,L]
+RewriteRule ^admin/cases/([0-9]+)/handover/?$ admin/handover.php?id=$1 [QSA,L]
+RewriteRule ^admin/cases/([0-9]+)/custody/?$ admin/custody.php?id=$1 [QSA,L]
+RewriteRule ^admin/submit/?$ submit.php?staff=1 [QSA,L]
+RewriteRule ^admin/confirmation/([A-Fa-f0-9]+)/?$ success.php?staff=1&token=$1 [QSA,L]
+RewriteRule ^admin/receipt/([A-Fa-f0-9]+)/?$ receipt.php?staff=1&token=$1 [QSA,L]
+RewriteRule ^admin/closure-requests/?$ admin/approvals.php [QSA,L]
+RewriteRule ^admin/users/?$ admin/admins.php [QSA,L]
+RewriteRule ^admin/import/?$ admin/import.php [QSA,L]
+RewriteRule ^admin/export/?$ admin/export.php [QSA,L]
+RewriteRule ^admin/activity/?$ admin/audit.php [QSA,L]
+RewriteRule ^admin/password/?$ admin/password.php [QSA,L]
+
+# ---------------- API ROUTES ----------------
+RewriteRule ^api/?$ api/index.php [QSA,L]
+RewriteRule ^api/(.*)$ api/index.php?route=$1 [QSA,L]

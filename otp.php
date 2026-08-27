@@ -1,0 +1,3 @@
+<?php
+require_once __DIR__.'/includes/helpers.php';header('Content-Type: application/json; charset=utf-8');
+if($_SERVER['REQUEST_METHOD']!=='POST'){http_response_code(405);echo json_encode(['error'=>'Method not allowed']);exit;}verify_csrf();public_rate_limit();$phone=clean_phone((string)($_POST['phone']??''));if(!valid_phone($phone)){http_response_code(422);echo json_encode(['error'=>'Enter a valid phone number']);exit;}if(!sms_configured()){http_response_code(503);echo json_encode(['error'=>'SMS OTP gateway not configured']);exit;}if(create_phone_otp($phone)){echo json_encode(['ok'=>true,'message'=>'OTP sent. It expires in 10 minutes.']);}else{http_response_code(502);echo json_encode(['error'=>'Could not send OTP']);}

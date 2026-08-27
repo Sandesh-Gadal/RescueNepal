@@ -1,0 +1,43 @@
+RESCUENEPAL.INFO v2.4 — PRODUCTION CHECKLIST
+
+FRESH INSTALL
+[ ] DNS/SSL is correct for rescuenepal.info
+[ ] Source is extracted directly in the domain document root
+[ ] New empty DB/user created with ALL PRIVILEGES
+[ ] /setup environment checks show READY
+[ ] First Superadmin created and /admin/login works
+[ ] Dashboard starts with zero cases
+
+UPGRADE FROM v2.2 OR v2.3
+[ ] Full files + DB backup completed
+[ ] Existing production config.php preserved
+[ ] Existing uploads preserved
+[ ] Correct migration executed once: MIGRATE_v2.2_to_v2.4.sql OR MIGRATE_v2.3_to_v2.4.sql
+[ ] Do NOT run /setup against the existing production DB
+
+FUNCTIONAL TESTS
+[ ] Missing Person test succeeds
+[ ] Rescue Request GPS test succeeds
+[ ] Rescued Person Safe / सकुशल fast form succeeds
+[ ] Injured / Semi-conscious / Unconscious assisted form succeeds
+[ ] Public /find returns only Rescued Person / Dead Body results and supports name/mobile/document/huliya tracing
+[ ] Family Match Request succeeds
+[ ] If SMS webhook configured, OTP send/verify succeeds
+[ ] Dead-body intake creates Body Trace ID + initial custody event and accepts multiple restricted photos
+[ ] Reconciliation produces candidate results
+[ ] Formal identification separation-of-duties test succeeds
+[ ] Deceased public page never displays restricted body photo/forensic data
+[ ] Deceased handover blocked before identification
+[ ] Rescued/deceased handover can link suggested or manually entered Missing Case ID and closes through the correct role workflow
+[ ] Excel export opens and all authorized sheets are present
+[ ] Printable case reports work for all four case types
+[ ] Mobile UI checked at ~360px, tablet and desktop
+
+SECURITY / OPERATIONS
+[ ] config.php is not shared publicly
+[ ] setup.php deleted after successful fresh installation (recommended)
+[ ] deployment/SETUP_ACCESS_CODE.txt deleted after successful fresh installation (recommended)
+[ ] DB backup schedule configured
+[ ] DVI/family export access reviewed with staff roles
+[ ] SMS OTP webhook/token configured only if an approved SMS service is available
+[ ] Privacy/forensic operating responsibility assigned to the competent authority

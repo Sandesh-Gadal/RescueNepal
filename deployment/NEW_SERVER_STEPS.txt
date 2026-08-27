@@ -1,0 +1,17 @@
+QUICK START — BABALHOST / CPANEL
+
+1. Add domain rescuenepal.info in cPanel and note its Document Root.
+2. Enable SSL/HTTPS.
+3. Create a NEW EMPTY MySQL database.
+4. Create a NEW MySQL user and password.
+5. Add the user to the database and grant ALL PRIVILEGES.
+6. Upload the complete RescueNepal source ZIP into the domain Document Root.
+7. Extract it directly there (do not create /rescue).
+8. Open https://rescuenepal.info/setup
+9. Open deployment/SETUP_ACCESS_CODE.txt in cPanel File Manager and copy the code.
+10. Enter MySQL details and the first Superadmin details.
+11. Complete setup.
+12. Login at https://rescuenepal.info/admin/login
+13. Confirm dashboard shows zero cases.
+14. Run one controlled Missing Person and Rescue test.
+15. Delete setup.php and deployment/SETUP_ACCESS_CODE.txt after successful verification.

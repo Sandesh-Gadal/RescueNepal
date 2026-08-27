@@ -1,0 +1,36 @@
+# Runtime configuration (contains DB credentials, secrets) — keep config.example.php only
+config.php
+
+# Installation lock created by setup.php
+storage/install.lock
+
+# User-uploaded content
+uploads/evidence/*
+uploads/family/*
+uploads/imports/*
+uploads/photos/*
+uploads/thumbs/*
+!uploads/**/.htaccess
+!uploads/**/.gitkeep
+
+# Anything else written to storage/ at runtime
+storage/*
+!storage/.htaccess
+!storage/.gitkeep
+
+# One-time setup access code — do not publish
+deployment/SETUP_ACCESS_CODE.txt
+
+# Logs
+*.log
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Dependency dirs, if ever introduced
+/vendor/
+/node_modules/
