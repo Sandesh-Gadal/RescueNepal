@@ -1,7 +1,7 @@
 (function(){
   const select=document.getElementById('langMode');
   function setMode(m){document.body.classList.remove('lang-mode-en','lang-mode-np','lang-mode-both');document.body.classList.add('lang-mode-'+m);localStorage.setItem('langMode',m);if(select)select.value=m;}
-  setMode(localStorage.getItem('langMode')||'both'); if(select)select.addEventListener('change',e=>setMode(e.target.value));
+  setMode(localStorage.getItem('langMode')||'en'); if(select)select.addEventListener('change',e=>setMode(e.target.value));
   document.querySelectorAll('input[type=file][accept*="image"]').forEach(inp=>inp.addEventListener('change',()=>{
     const img=inp.dataset.preview?document.getElementById(inp.dataset.preview):null;
     const files=inp.files?Array.from(inp.files):[];
