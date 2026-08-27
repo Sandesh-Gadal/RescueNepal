@@ -3,4 +3,4 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home4/labhexac/public_html/rescue/
     - /bin/mkdir -p $DEPLOYPATH
-    - /usr/bin/rsync -rv --exclude=".git" --exclude=".cpanel.yml" ./ $DEPLOYPATH
+    - /bin/tar --exclude=".git" --exclude=".cpanel.yml" -cf - . | (cd $DEPLOYPATH && /bin/tar -xf -)

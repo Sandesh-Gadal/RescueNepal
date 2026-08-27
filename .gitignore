@@ -19,7 +19,7 @@ storage/*
 !storage/.gitkeep
 
 # One-time setup access code — do not publish
-deployment/SETUP_ACCESS_CODE.txt
+# deployment/SETUP_ACCESS_CODE.txt
 
 # Logs
 *.log

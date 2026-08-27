@@ -1,0 +1,6 @@
+RescueNepal.info one-time setup access code
+
+RNSETUP-756001648EC2
+
+Enter this code on https://rescuenepal.info/setup during first installation.
+Delete this file after setup if desired. The deployment folder is blocked from web access.
