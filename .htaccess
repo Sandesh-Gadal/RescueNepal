@@ -1,6 +1,7 @@
 Options -Indexes -MultiViews
 DirectoryIndex index.php
 RewriteEngine On
+RewriteBase /
 
 # Production HTTPS. Handles cPanel HTTPS and common reverse proxies.
 RewriteCond %{HTTPS} !=on

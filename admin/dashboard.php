@@ -115,7 +115,7 @@ foreach(db()->query("SELECT status,COUNT(*) cnt FROM cases WHERE deleted_at IS N
     $statusCounts[$row['status']]=(int)$row['cnt'];
 }
 $pending=(int)db()->query("SELECT COUNT(*) FROM close_approval_requests WHERE status='pending'")->fetchColumn();
-$pendingFamily=(int)db()->query("SELECT COUNT(*) FROM family_match_requests WHERE review_status IN ('submitted','under_review','possible_match')")->fetchColumn();
+$pendingFamily=(int)db()->query("SELECT COUNT(*) FROM family_match_requests WHERE status IN ('submitted','under_review','possible_match')")->fetchColumn();
 $pendingIdentification=(int)db()->query("SELECT COUNT(*) FROM identification_approval_requests WHERE status='pending'")->fetchColumn();
 
 $foreignCountries=db()->query("SELECT nationality_code,nationality_name,COUNT(*) cnt,SUM(status NOT IN ('closed','draft')) active_cnt FROM cases WHERE deleted_at IS NULL AND type='missing' AND nationality_code IS NOT NULL AND nationality_code<>'NP' GROUP BY nationality_code,nationality_name ORDER BY cnt DESC,nationality_name ASC LIMIT 10")->fetchAll();
