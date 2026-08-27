@@ -13,8 +13,8 @@ page_header('Rescued Person',$staff);
 <div class="col-12 form-group-heading"><span class="group-number">1</span><div><b><?=render_lang('Current Condition','हालको अवस्था')?></b><div class="hint"><?=render_lang('Choose the condition first. The form will show only the information needed for that condition.','पहिले अवस्था छान्नुहोस्। त्यसपछि आवश्यक विवरण मात्र देखाइनेछ।')?></div></div></div>
 <div class="col-12 condition-choice-grid">
   <label class="condition-choice"><input type="radio" name="condition_level" value="safe" checked><span><b>Safe / सकुशल</b><small><?=render_lang('Can provide identity/contact details','नाम र सम्पर्क विवरण दिन सक्ने')?></small></span></label>
-  <label class="condition-choice"><input type="radio" name="condition_level" value="injured"><span><b>Injured / घाइते</b><small><?=render_lang('Needs treatment or medical attention','उपचार आवश्यक')?></small></span></label>
-  <label class="condition-choice"><input type="radio" name="condition_level" value="semi_conscious"><span><b>Semi-conscious / अर्धचेत</b><small><?=render_lang('Limited communication possible','सीमित रूपमा बोल्न/बुझ्न सक्ने')?></small></span></label>
+  <label class="condition-choice"><input type="radio" name="condition_level" value="injured"><span><b>Injured / घाइते</b><small><?=render_lang('Needs treatment. Can often still give name/contact.','उपचार आवश्यक। प्रायः नाम/सम्पर्क दिन सक्ने।')?></small></span></label>
+  <label class="condition-choice"><input type="radio" name="condition_level" value="semi_conscious"><span><b>Semi-conscious / अर्धचेत</b><small><?=render_lang('Limited communication. May give some personal details.','सीमित रूपमा बोल्न सक्ने। केही व्यक्तिगत विवरण दिन सक्ने।')?></small></span></label>
   <label class="condition-choice"><input type="radio" name="condition_level" value="unconscious"><span><b>Unconscious / अचेत</b><small><?=render_lang('Cannot provide identity details','आफ्नो विवरण दिन नसक्ने')?></small></span></label>
 </div>
 
@@ -31,7 +31,7 @@ page_header('Rescued Person',$staff);
 <div class="col-4 gps-panel"><label>GPS</label><button class="btn btn-secondary btn-block" type="button" id="captureGps">Capture GPS / GPS लिनुहोस्</button><div class="mini-grid"><input name="rescue_latitude" id="rescueLat" placeholder="Latitude"><input name="rescue_longitude" id="rescueLng" placeholder="Longitude"></div><div class="small muted" id="gpsMsg"></div></div>
 
 <div id="safeFields" class="col-12 conditional-panel">
-<div class="form-group-heading"><span class="group-number">3</span><div><b><?=render_lang('Safe Person Details','सकुशल व्यक्तिको विवरण')?></b><div class="hint"><?=render_lang('Keep this fast: identity, contact, workplace/destination and one family contact.','छिटो भर्नुहोस्: नाम, सम्पर्क, काम/गन्तव्य र परिवार सम्पर्क।')?></div></div></div>
+<div class="form-group-heading"><span class="group-number">3</span><div><b><?=render_lang('Personal Details (if the person can communicate)','व्यक्तिगत विवरण (व्यक्तिले बोल्न/बुझ्न सक्ने भए)')?></b><div class="hint"><?=render_lang('Keep this fast: identity, contact, workplace/destination and one family contact. Fill whatever the person can provide.','छिटो भर्नुहोस्: नाम, सम्पर्क, काम/गन्तव्य र परिवार सम्पर्क। व्यक्तिले दिन सक्ने जति मात्र भर्नुहोस्।')?></div></div></div>
 <div class="grid compact-grid">
 <div class="col-5"><label><?=render_lang('Full Name *','पूरा नाम *')?><input name="name" id="safeName" maxlength="150"></label></div>
 <div class="col-3"><label><?=render_lang('Age','उमेर')?><input type="number" name="age" min="0" max="120" inputmode="numeric"></label></div>
@@ -45,7 +45,7 @@ page_header('Rescued Person',$staff);
 </div></div>
 
 <div id="assistedFields" class="col-12 conditional-panel" hidden>
-<div class="form-group-heading"><span class="group-number">3</span><div><b><?=render_lang('Injured / Semi-conscious / Unconscious Person','घाइते / अर्धचेत / अचेत व्यक्तिको विवरण')?></b><div class="hint"><?=render_lang('Do not guess a name. Record approximate appearance and any documents found.','नाम अनुमान नगर्नुहोस्। अनुमानित हुलिया र भेटिएका कागजात मात्र लेख्नुहोस्।')?></div></div></div>
+<div class="form-group-heading"><span class="group-number">4</span><div><b><?=render_lang('Appearance & Injury Details','हुलिया र चोटको विवरण')?></b><div class="hint"><?=render_lang('If identity is not known, do not guess a name — record approximate appearance and any documents found instead.','पहिचान थाहा नभए नाम अनुमान नगर्नुहोस् — अनुमानित हुलिया र भेटिएका कागजात मात्र लेख्नुहोस्।')?></div></div></div>
 <div class="grid compact-grid">
 <div class="col-4"><label><?=render_lang('Approx. Age From','अनुमानित उमेरदेखि')?><input type="number" name="estimated_age_min" min="0" max="120"></label></div>
 <div class="col-4"><label><?=render_lang('Approx. Age To','अनुमानित उमेरसम्म')?><input type="number" name="estimated_age_max" min="0" max="120"></label></div>
@@ -59,14 +59,14 @@ page_header('Rescued Person',$staff);
 <div class="col-12"><label><?=render_lang('Injury / Condition Summary','चोट / अवस्थाको छोटो विवरण')?><textarea name="injury_summary"></textarea></label></div>
 </div></div>
 
-<div class="col-12 form-group-heading"><span class="group-number">4</span><div><b><?=render_lang('Where is the rescued person now?','उद्धार गरिएको व्यक्ति अहिले कहाँ छन्?')?></b></div></div>
+<div class="col-12 form-group-heading"><span class="group-number">5</span><div><b><?=render_lang('Where is the rescued person now?','उद्धार गरिएको व्यक्ति अहिले कहाँ छन्?')?></b></div></div>
 <div class="col-4"><label><?=render_lang('Place Type *','स्थानको प्रकार *')?><select name="current_place_type" required><option value="rescue_shelter">Shelter House / आश्रय गृह</option><option value="hospital">Hospital / अस्पताल</option><option value="police">Police Office / प्रहरी कार्यालय</option><option value="army_apf">Army/APF Facility / सेना/सशस्त्र</option><option value="local_government">Local Government / स्थानीय तह</option><option value="temporary_camp">Temporary Camp / अस्थायी शिविर</option><option value="family">With Family / परिवारसँग</option><option value="ngo_ingo">NGO/INGO</option><option value="other">Other / अन्य</option></select></label></div>
 <div class="col-8"><label><?=render_lang('Shelter / Hospital / Institution Name *','आश्रय गृह / अस्पताल / संस्थाको नाम *')?><input name="current_institution_name" maxlength="190" required></label></div>
 <div class="col-8"><label><?=render_lang('Current Address / Location *','हालको ठेगाना / स्थान *')?><input name="current_institution_address" maxlength="300" required></label></div>
 <div class="col-4"><label><?=render_lang('Institution Contact Phone *','संस्था सम्पर्क फोन *')?><input name="institution_contact_phone" inputmode="tel" required></label></div>
 <div class="col-6"><label><?=render_lang('Institution Contact Person','संस्था सम्पर्क व्यक्ति')?><input name="institution_contact_name" maxlength="150"></label></div>
 <div class="col-6"><label><?=render_lang('Post / Designation','पद')?><input name="institution_contact_post" maxlength="120"></label></div>
-<div class="col-6"><label><?=render_lang('Current Photo (living person)','हालको फोटो (जीवित व्यक्ति)')?><input type="file" name="photo" accept="image/jpeg,image/png,image/webp,image/*" capture="environment" data-preview="photoPreview"></label><img id="photoPreview" class="photo-preview" alt="Preview"></div>
+<div class="col-6"><label><?=render_lang('Current Photo (living person)','हालको फोटो (जीवित व्यक्ति)')?><input type="file" name="photo" accept="image/jpeg,image/png,image/webp,image/*" data-preview="photoPreview"></label><img id="photoPreview" class="photo-preview" alt="Preview"></div>
 <div class="col-6"><label><?=render_lang('Other Belongings / Additional Details','अन्य सामान / थप विवरण')?><textarea name="belongings"></textarea></label></div>
 <input type="hidden" name="public_photo_allowed" value="1">
 </div>
@@ -77,7 +77,7 @@ page_header('Rescued Person',$staff);
  const form=document.getElementById('rescuedForm'),safe=document.getElementById('safeFields'),assisted=document.getElementById('assistedFields');
  const safeName=document.getElementById('safeName'),safeContactName=document.getElementById('safeContactName'),safeContactPhone=document.getElementById('safeContactPhone');
  const assistedGender=document.getElementById('assistedGender');
- function sync(){const v=form.querySelector('input[name="condition_level"]:checked')?.value||'safe';const isSafe=v==='safe';safe.hidden=!isSafe;assisted.hidden=isSafe;safeName.required=isSafe;safeContactName.required=isSafe;safeContactPhone.required=isSafe;assistedGender.required=!isSafe;}
+ function sync(){const v=form.querySelector('input[name="condition_level"]:checked')?.value||'safe';const isSafe=v==='safe';const canIdentify=v==='safe'||v==='injured'||v==='semi_conscious';safe.hidden=!canIdentify;assisted.hidden=isSafe;safeName.required=isSafe;safeContactName.required=isSafe;safeContactPhone.required=isSafe;assistedGender.required=!canIdentify;}
  form.querySelectorAll('input[name="condition_level"]').forEach(x=>x.addEventListener('change',sync));sync();
  const btn=document.getElementById('captureGps');btn?.addEventListener('click',()=>{const msg=document.getElementById('gpsMsg');if(!navigator.geolocation){msg.textContent='GPS not supported';return;}msg.textContent='Capturing GPS...';navigator.geolocation.getCurrentPosition(p=>{document.getElementById('rescueLat').value=p.coords.latitude.toFixed(7);document.getElementById('rescueLng').value=p.coords.longitude.toFixed(7);msg.textContent='GPS captured';},()=>{msg.textContent='Could not capture GPS. Enter location manually.';},{enableHighAccuracy:true,timeout:10000});});
 })();

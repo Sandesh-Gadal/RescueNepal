@@ -138,7 +138,7 @@ $viewLabels=[
 ];
 
 function dashboard_link(string $view): string {
-    return base_url('admin/dashboard.php?'.http_build_query(['view'=>$view]));
+    return base_url('admin/dashboard.php?'.http_build_query(['view'=>$view]).'#dashboard-filter-panel');
 }
 function latest_case_location(array $c): string {
     return (string)($c['current_location'] ?: ($c['where_found'] ?: ($c['last_seen_address'] ?: $c['from_location'])));
@@ -279,7 +279,7 @@ page_header('Dashboard',true);
     <?php endforeach;?>
   </div>
 
-  <form class="dashboard-filter-panel" method="get">
+  <form class="dashboard-filter-panel" id="dashboard-filter-panel" method="get" action="<?=e(base_url('admin/dashboard.php'))?>#dashboard-filter-panel">
     <input type="hidden" name="view" value="<?=e($view)?>">
     <div class="dashboard-filter-main">
       <label class="filter-search"><span>Search</span><input name="q" value="<?=e($q)?>" placeholder="Name, Case ID, phone or address"></label>
@@ -288,7 +288,7 @@ page_header('Dashboard',true);
       <label><span>Status</span><select name="status"><option value="">All statuses</option><?php foreach(case_status_labels() as $s=>$lbl):?><option value="<?=e($s)?>" <?=$status===$s?'selected':''?>><?=e($lbl[0])?></option><?php endforeach;?></select></label>
       <label><span>Condition</span><select name="condition"><option value="">All conditions</option><?php foreach(case_condition_labels() as $cnd=>$lbl):?><option value="<?=e($cnd)?>" <?=$condition===$cnd?'selected':''?>><?=e($lbl[0])?></option><?php endforeach;?></select></label>
       <label><span>Location</span><input name="location" value="<?=e($location)?>" placeholder="Current / found / last seen"></label>
-      <div class="dashboard-filter-buttons"><button class="btn btn-primary" type="submit">Apply Filters</button><a class="btn btn-ghost" href="<?=e(base_url('admin/dashboard.php'))?>">Clear All</a></div>
+      <div class="dashboard-filter-buttons"><button class="btn btn-primary" type="submit">Apply Filters</button><a class="btn btn-ghost" href="<?=e(base_url('admin/dashboard.php'))?>#dashboard-filter-panel">Clear All</a></div>
     </div>
     <details class="dashboard-more-filters" <?=($from||$to||$ageMin||$ageMax||$vehicle||$bs||$nationality)?'open':''?>>
       <summary>More filters</summary>
