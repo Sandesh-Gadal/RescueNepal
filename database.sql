@@ -267,6 +267,7 @@ CREATE TABLE IF NOT EXISTS identification_approval_requests (
  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
  case_id INT UNSIGNED NOT NULL,
  proposed_missing_case_id INT UNSIGNED NULL,
+ family_match_request_id BIGINT UNSIGNED NULL,
  proposed_identity_name VARCHAR(150) NOT NULL,
  identification_basis TEXT NOT NULL,
  requested_by INT UNSIGNED NOT NULL,
@@ -275,6 +276,7 @@ CREATE TABLE IF NOT EXISTS identification_approval_requests (
  reviewed_by INT UNSIGNED NULL, reviewed_at DATETIME NULL, review_notes TEXT NULL,
  CONSTRAINT fk_ident_case FOREIGN KEY(case_id) REFERENCES cases(id) ON DELETE CASCADE,
  CONSTRAINT fk_ident_missing FOREIGN KEY(proposed_missing_case_id) REFERENCES cases(id) ON DELETE SET NULL,
+ CONSTRAINT fk_ident_family_request FOREIGN KEY(family_match_request_id) REFERENCES family_match_requests(id) ON DELETE SET NULL,
  CONSTRAINT fk_ident_req FOREIGN KEY(requested_by) REFERENCES admins(id),
  CONSTRAINT fk_ident_review FOREIGN KEY(reviewed_by) REFERENCES admins(id) ON DELETE SET NULL,
  INDEX idx_ident_pending(status,requested_at)
