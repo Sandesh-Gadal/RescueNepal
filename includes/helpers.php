@@ -113,7 +113,7 @@ function send_security_headers(): void {
     header('X-Frame-Options: SAMEORIGIN');
     header('Referrer-Policy: strict-origin-when-cross-origin');
     header('Permissions-Policy: geolocation=(self), camera=(self), microphone=()');
-    header("Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; img-src 'self' data: https://*.tile.openstreetmap.org https://tile.openstreetmap.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com; connect-src 'self' https://nominatim.openstreetmap.org; upgrade-insecure-requests");
+    header("Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; frame-src 'self' https://www.google.com; object-src 'none'; img-src 'self' data: https://*.tile.openstreetmap.org https://tile.openstreetmap.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com; connect-src 'self' https://nominatim.openstreetmap.org; upgrade-insecure-requests");
 }
 
 /** Redirect visible legacy *.php GET URLs to their canonical clean route. */
@@ -376,6 +376,59 @@ function public_status_html(string $status): string {
 function public_condition_html(?string $condition): string {
     if(!$condition) return '';
     return '<span class="lang-en">'.e(case_condition_label($condition,'en')).'</span><span class="lang-np">'.e(case_condition_label($condition,'np')).'</span>';
+}
+
+function public_case_join_sql(): string {
+    return 'LEFT JOIN rescued_person_details rd ON rd.case_id=c.id LEFT JOIN deceased_details dd ON dd.case_id=c.id';
+}
+function public_case_select_sql(): string {
+    return 'c.*,rd.rescue_location,rd.current_institution_name,rd.institution_contact_phone,rd.institution_office_phone,rd.public_photo_allowed,rd.identity_status rescued_identity,rd.estimated_age_min r_age_min,rd.estimated_age_max r_age_max,dd.recovery_location dd_recovery_location,dd.current_mortuary,dd.identity_status deceased_identity,dd.estimated_age_min d_age_min,dd.estimated_age_max d_age_max,dd.public_identity_release,dd.official_identity_name';
+}
+function derive_public_case_card(array $r): array {
+    $isDead=$r['type']==='deceased';
+    $isRescued=$r['type']==='rescued';
+    $publicName=$r['name'];
+    $showPhoto=!empty($r['thumb_url']);
+    $publicContact=$r['family_contact_phone'];
+    $displayLocation=$r['last_seen_address'];
+    $ageText=$r['age']!==null?(string)$r['age']:'';
+    if($isRescued){
+        if(($r['rescued_identity']??'')==='unknown'||$publicName==='')$publicName='Unknown Rescued Person / पहिचान नखुलेको उद्धार व्यक्ति';
+        $showPhoto=$showPhoto&&!empty($r['public_photo_allowed']);
+        $publicContact=$r['institution_office_phone']?:($r['institution_contact_phone']?:'');
+        $displayLocation=$r['current_institution_name']?:($r['rescue_location']?:$r['last_seen_address']);
+        if($ageText===''&&($r['r_age_min']||$r['r_age_max'])){$mn=$r['r_age_min'];$mx=$r['r_age_max'];$ageText=($mn&&$mx&&$mn==$mx)?(string)$mn:(($mn?:'?').'–'.($mx?:'?'));}
+    } elseif($isDead){
+        $showPhoto=false;
+        $publicContact='';
+        $publicName=(($r['deceased_identity']??'')==='confirmed'&&!empty($r['public_identity_release'])&&!empty($r['official_identity_name']))?$r['official_identity_name']:'Unidentified Deceased Person / पहिचान नखुलेको शव';
+        $displayLocation=$r['dd_recovery_location']?:$r['current_mortuary'];
+        if($ageText===''&&($r['d_age_min']||$r['d_age_max'])){$mn=$r['d_age_min'];$mx=$r['d_age_max'];$ageText=($mn&&$mx&&$mn==$mx)?(string)$mn:(($mn?:'?').'–'.($mx?:'?'));}
+    }
+    $ageGender=trim(($ageText!==''?$ageText.' yrs':'Age unknown').' · '.($r['gender']?:'Unknown'));
+    return ['row'=>$r,'isDead'=>$isDead,'publicName'=>$publicName,'showPhoto'=>$showPhoto,'publicContact'=>$publicContact,'displayLocation'=>$displayLocation,'ageGender'=>$ageGender];
+}
+function public_case_icon(string $name): string {
+    $icons=[
+        'user'=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+        'pin'=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+        'phone'=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+    ];
+    return $icons[$name]??'';
+}
+function render_public_case_card(array $card): void {
+    $r=$card['row'];$isDead=$card['isDead'];
+    echo '<article class="cb-card type-'.e($r['type']).'">';
+    echo '<div class="cb-photo">';
+    if($card['showPhoto']) echo '<img src="'.e(base_url($r['thumb_url'])).'" alt="'.e($card['publicName']).'" loading="lazy">';
+    else echo '<div class="cb-photo-fallback">'.public_case_icon('user').'</div>';
+    echo '<span class="cb-type-ribbon">'.e(case_type_label($r['type'])).'</span></div>';
+    echo '<div class="cb-body"><div class="cb-toprow"><span class="status status-'.e($r['status']).'">'.public_status_html($r['status']).'</span></div>';
+    echo '<h3 class="cb-name">'.e($card['publicName']).'</h3><div class="cb-code">'.e($r['case_code']).'</div>';
+    echo '<ul class="cb-meta"><li>'.public_case_icon('user').'<span>'.e($card['ageGender']).'</span></li><li>'.public_case_icon('pin').'<span>'.e($card['displayLocation']?:'Location not published').'</span></li></ul>';
+    if($card['publicContact']) echo '<a class="cb-contact" href="tel:'.e($card['publicContact']).'">'.public_case_icon('phone').'<span>'.e($card['publicContact']).'</span></a>';
+    elseif($isDead) echo '<div class="cb-restricted">Photo and personal contact details are withheld out of respect for the deceased.</div>';
+    echo '</div><a class="cb-cta" href="'.e(base_url('track/'.$r['case_code'])).'">View Full Status →</a></article>';
 }
 
 

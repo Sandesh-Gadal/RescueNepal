@@ -30,7 +30,7 @@ if($code){
  }
 }
 page_header($adminPreview?'Public Case Preview':'Track Case',$adminPreview);
-if($latestGps):?><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><?php endif;?>
+?>
 <?php if($adminPreview):?><div class="alert alert-info"><b>Admin public-view preview.</b> This page shows only information that would be visible to the public.</div><?php else:?><section class="track-hero"><div><h1><?=render_lang('Track Rescue Nepal Case','रेस्क्यु नेपाल केस ट्र्याक गर्नुहोस्')?></h1><p><?=render_lang('Enter the Case ID to see the latest public status and verified updates.','पछिल्लो सार्वजनिक स्थिति र प्रमाणित अपडेट हेर्न केस आईडी राख्नुहोस्।')?></p></div></section>
 <form class="track-search" method="get" action="<?=e(base_url('track.php'))?>"><input name="code" value="<?=e($code)?>" placeholder="CASE-2026-000001" autocomplete="off" required><button class="btn btn-primary btn-lg">Search / खोज्नुहोस्</button></form><?php endif;?>
 <?php if(!$adminPreview&&$code&&!$case): ?><div class="alert alert-danger track-message"><b>Case not found / केस फेला परेन</b><br><span class="small">Check the Case ID and try again.</span></div><?php endif; ?>
@@ -64,7 +64,7 @@ elseif($case['type']==='deceased'&&$deceasedDetail){$showPhoto=false;$publicCont
  </div>
 </div>
 
-<?php if($latestGps):?><div class="card public-map-card"><div class="section-title compact-title"><div><h2>Latest Known Location / पछिल्लो स्थान</h2></div><a class="btn btn-secondary btn-sm" target="_blank" href="https://www.google.com/maps?q=<?=e($latestGps['lat'].','.$latestGps['lng'])?>">Open Directions</a></div><div id="publicMap" class="map"></div><div class="small muted map-caption">GPS coordinates are based on the latest public case update or original rescue report.</div></div><?php endif;?>
+<?php if($latestGps):$mapQ=rawurlencode($latestGps['lat'].','.$latestGps['lng'].($latestGps['label']?' ('.$latestGps['label'].')':''));?><div class="card public-map-card"><div class="section-title compact-title"><div><h2>Latest Known Location / पछिल्लो स्थान</h2></div><a class="btn btn-secondary btn-sm" target="_blank" href="https://www.google.com/maps?q=<?=e($latestGps['lat'].','.$latestGps['lng'])?>">Open Directions</a></div><iframe class="map" src="https://www.google.com/maps?q=<?=e($mapQ)?>&z=15&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe><div class="small muted map-caption">GPS coordinates are based on the latest public case update or original rescue report.</div></div><?php endif;?>
 
 <div class="card public-timeline-card"><div class="section-title compact-title"><div><h2>Status Timeline / स्थिति समयरेखा</h2><div class="muted small">Verified updates posted by the rescue/missing-person operations team.</div></div></div>
  <div class="timeline public-timeline">
@@ -77,5 +77,4 @@ elseif($case['type']==='deceased'&&$deceasedDetail){$showPhoto=false;$publicCont
 </div>
 <div class="track-help-banner"><div><b><?=render_lang('Could this be your family member?','के यो तपाईंको परिवारको सदस्य हुन सक्छ?')?></b><p><?=render_lang('Submit a family match request. Rescue Nepal staff will verify the information before any identification or handover.','परिवार मिलान अनुरोध पठाउनुहोस्। कुनै पहिचान वा हस्तान्तरण अघि रेस्क्यु नेपालका अधिकृत कर्मचारीले जानकारी प्रमाणित गर्नेछन्।')?></p></div><a class="btn btn-primary" href="<?=e(base_url('family-match/'.$case['id']))?>">Family Match Request</a></div>
 <?php endif; ?>
-<?php if($latestGps):?><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>const pm=L.map('publicMap').setView([<?=json_encode($latestGps['lat'])?>,<?=json_encode($latestGps['lng'])?>],15);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(pm);L.marker([<?=json_encode($latestGps['lat'])?>,<?=json_encode($latestGps['lng'])?>]).addTo(pm).bindPopup(<?=json_encode($latestGps['label'])?>).openPopup();</script><?php endif;?>
 <?php page_footer(); ?>
