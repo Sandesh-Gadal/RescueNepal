@@ -67,7 +67,7 @@ page_header('Dead Body Registration',true);
 <div class="col-6"><label>Recovery Latitude<input name="recovery_latitude" inputmode="decimal"></label></div><div class="col-6"><label>Recovery Longitude<input name="recovery_longitude" inputmode="decimal"></label></div>
 
 <div class="col-12 form-group-heading"><span class="group-number">3</span><div><b>Shifted To / कहाँ सारियो</b></div></div>
-<div class="col-4"><label>Shifted To Type *<select name="shifted_to_type" id="shiftedType" required><option value="bharatpur_hospital">Bharatpur Hospital / भरतपुर अस्पताल</option><option value="other_hospital">Other Hospital / अन्य अस्पताल</option><option value="mortuary">Dead Body House / Mortuary / शव गृह</option><option value="police_facility">Police Facility / प्रहरी परिसर</option><option value="other">Other / अन्य</option></select></label></div>
+<div class="col-4"><label>Shifted To Type *<select name="shifted_to_type" id="shiftedType" required><option value="other_hospital">Other Hospital / अन्य अस्पताल</option><option value="mortuary">Dead Body House / Mortuary / शव गृह</option><option value="police_facility">Police Facility / प्रहरी परिसर</option><option value="other">Other / अन्य</option></select></label></div>
 <div class="col-8"><label>Hospital / Dead Body House / Institution Name *<input name="current_mortuary" id="currentMortuary" required value="Bharatpur Hospital"></label></div>
 <div class="col-8"><label>Storage / Exact Location<input name="current_storage_location" placeholder="Mortuary room, cold room, body rack/reference"></label></div>
 <div class="col-4"><label>Responsible Contact Phone *<input name="recovery_officer_phone" required inputmode="tel"></label></div>
