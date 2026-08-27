@@ -13,8 +13,8 @@ function page_header(string $title, bool $admin=false): void {
     $full=e($title.' - '.$appDisplay);
     if($admin || $title==='Admin Login'){ header('X-Robots-Tag: noindex, nofollow, noarchive'); header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0'); }
     echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#ffffff">'.(($admin || $title==='Admin Login')?'<meta name="robots" content="noindex,nofollow,noarchive">':'').'<title>'.$full.'</title>';
-    echo '<link rel="stylesheet" href="'.e(base_url('assets/app.css?v=2.4.7')).'">';
-    echo '<link rel="stylesheet" href="'.e(base_url('assets/simple-ui.css?v=2.4.7')).'">';
+    echo '<link rel="stylesheet" href="'.e(base_url('assets/app.css?v=2.4.21')).'">';
+    echo '<link rel="stylesheet" href="'.e(base_url('assets/simple-ui.css?v=2.4.21')).'">';
     echo '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet"></head><body>';
 
     echo '<header class="simple-header"><div class="container simple-header-row">';
@@ -54,5 +54,5 @@ function page_footer(): void {
         echo '<nav class="simple-mobile-admin-nav no-print"><a href="'.e(base_url('admin/dashboard.php')).'">Cases</a><a href="'.e(base_url('admin/operator_help.php')).'">New Report</a><a href="'.e(base_url('admin/logout.php')).'">Logout</a></nav>';
     }
     echo '<footer class="simple-footer"><div class="container">Rescue Nepal · Missing, Rescue, DVI & Family Reunification Registry</div></footer>';
-    echo '<script src="'.e(base_url('assets/app.js?v=2.4.7')).'"></script></body></html>';
+    echo '<script src="'.e(base_url('assets/app.js?v=2.4.21')).'"></script></body></html>';
 }
