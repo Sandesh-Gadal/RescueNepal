@@ -1,8 +1,7 @@
 <?php
 require_once __DIR__.'/includes/layout.php';
 require_once __DIR__.'/includes/auth.php';
-$staff=!empty($_GET['staff']);$existing=current_admin();
-if($staff){$admin=require_admin(['operator','approver','superadmin']);}else{if($existing)redirect(base_url('rescued.php?staff=1'));$admin=null;}
+$admin=require_admin(['operator','approver','superadmin']);$staff=true;
 page_header('Rescued Person',$staff);
 ?>
 <div class="section-title"><div><h1><?=render_lang('Register a Rescued Person','उद्धार गरिएको व्यक्ति दर्ता')?></h1><div class="muted"><?=render_lang('For officials, rescuers, shelter houses, hospitals or responsible volunteers reporting a person who has already been rescued.','पहिले नै उद्धार गरिएको व्यक्तिको विवरण अधिकारी, उद्धारकर्ता, आश्रय गृह, अस्पताल वा जिम्मेवार स्वयंसेवकले दर्ता गर्न प्रयोग गर्ने फारम।')?></div></div><a class="btn btn-ghost" href="<?=e($staff?base_url('admin/operator_help.php'):base_url())?>">Back / पछाडि</a></div>

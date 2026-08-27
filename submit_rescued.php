@@ -3,8 +3,7 @@ require_once __DIR__.'/includes/helpers.php';
 require_once __DIR__.'/includes/auth.php';
 if($_SERVER['REQUEST_METHOD']!=='POST')redirect(base_url());
 verify_csrf();
-$staff=!empty($_GET['staff']);$existing=current_admin();
-if($staff)$admin=require_admin(['operator','approver','superadmin']);else{if($existing){http_response_code(409);exit('Use the admin form.');}$admin=null;public_rate_limit();}
+$admin=require_admin(['operator','approver','superadmin']);
 
 $allowedConditions=['safe','injured','semi_conscious','unconscious'];
 $conditionLevel=$_POST['condition_level']??'safe';if(!in_array($conditionLevel,$allowedConditions,true))$conditionLevel='safe';
